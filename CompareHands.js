@@ -44,7 +44,7 @@ export default class CompareHands {
   }
 
   static isFullHouse(hand) { // TODO!
-    return 0;
+    return this.isThreeOfAKind(hand) && this.isOnePair(hand);
   }
 
   static isFlush(hand) {
