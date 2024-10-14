@@ -33,6 +33,21 @@ export default class CompareHands {
 
   }
 
+  static counter(hand, caller){
+    const multipleCards = [];
+    for (let i = 0; i < hand.length; i++) {
+     let count = 0; 
+      for (let card of hand.cards) {
+        for (let k = 0; k < CompareHands.suits.length; k++) {
+          if (card.rank === CompareHands.suits[k]) {
+            count++;
+            multipleCards.push(card.suit + card.rank + "")
+          }
+        }
+      } 
+    }
+  }
+
   static isStraightFlush(hand) {
     // if not straight or not flush -> 0
     // otherwise score of flush
@@ -40,11 +55,12 @@ export default class CompareHands {
   }
 
   static isFourOfAKind(hand) { // TODO!
+    this.counter(hand)
     return 0;
   }
 
   static isFullHouse(hand) { // TODO!
-    return 0;
+    return this.isThreeOfAKind(hand) && this.isOnePair(hand);
   }
 
   static isFlush(hand) {
@@ -85,14 +101,17 @@ export default class CompareHands {
   }
 
   static isThreeOfAKind(hand) { // TODO!
+    this.counter(hand)
     return 0;
   }
 
   static isTwoPair(hand) { // TODO!
+    this.counter(hand)
     return 0;
   }
 
   static isOnePair(hand) { // TODO!
+    this.counter(hand)
     return 0;
   }
 
