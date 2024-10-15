@@ -42,11 +42,41 @@ export default class CompareHands {
           if (card.rank === CompareHands.suits[k]) {
             count++;
             multipleCards.push(card.suit + card.rank + "")
+
           }
+        
         }
       } 
+    }  
+    if (multipleCards.length > 1) {
+      let points;
+      if (caller = "isOnePair") {
+        for (let i = 0; i < multipleCards.length; i++) {
+          points = this.rankToPoint(multipleCards[i])
+        }
+        return points;
+        
+      }if (caller = "isThreeOfAKind") {
+        for (let i = 0; i < multipleCards.length; i++) {
+          points = this.rankToPoint(multipleCards[i])
+          
+        }
+        return points;
+      }if (caller = "isFourOfAKind") {
+        for (let i = 0; i < multipleCards.length; i++) {
+          points = this.rankToPoint(multipleCards[i])
+          
+        }
+        return points;
+      }
+    
+    }
+    if (multipleCards.length < 1) {
+      return false
     }
   }
+
+  
 
   static isStraightFlush(hand) {
     // if not straight or not flush -> 0
@@ -55,11 +85,14 @@ export default class CompareHands {
   }
 
   static isFourOfAKind(hand) { // TODO!
-    this.counter(hand)
-    return 0;
+    const score = this.counter(hand, "isFourOfAKind")
+    if (!score) {
+      return 0;
+    } 
+    return score
   }
 
-  static isFullHouse(hand) { // TODO!
+  static isFullHouse(hand) { 
     return this.isThreeOfAKind(hand) && this.isOnePair(hand);
   }
 
@@ -100,31 +133,42 @@ export default class CompareHands {
     return this.rankToPoint(ranks[4]);
   }
 
-  static isThreeOfAKind(hand) { // TODO!
-    this.counter(hand)
-    return 0;
+  static isThreeOfAKind(hand ) { // TODO!
+    const score = this.counter(hand, "isThreeOfAKind")
+    if (!score) {
+      return 0;
+    } 
+    return score
   }
 
   static isTwoPair(hand) { // TODO!
-    this.counter(hand)
-    return 0;
+    const score = this.isOnePair(hand) + this.isOnePair(hand)
+    
+    return score
   }
 
   static isOnePair(hand) { // TODO!
-    this.counter(hand)
-    return 0;
+    const score = this.counter(hand, "isOnePair")
+    if (!score) {
+      return 0;
+    }
+
+    return score
   }
 
-  static isHighestCard(hand) { // TODO!
-    return 0;
+  static isHighestCard(hand) {
+    if (!this.counter(hand) && !this.isStraight(hand) && !this.isFlush(hand)) {
+      hand.cards = hand.cards.sort((b, a) => {
+        return hand.cards[0] 
+      });
+    } 
   }
+
 
   // helper functions below:
-
   static rankToPoint(rank) {
     return this.ranks.indexOf(rank) + 2;
   }
-
   static sortByRank(hand) {
     hand.cards = hand.cards.sort((a, b) => {
       return this.rankToPoint(a.rank) < this.rankToPoint(b.rank) ?
