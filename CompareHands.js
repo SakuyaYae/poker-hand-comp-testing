@@ -33,50 +33,52 @@ export default class CompareHands {
 
   }
 
-  static counter(hand, caller){
+  static counter(hand, caller) {
     const multipleCards = [];
-    for (let i = 0; i < hand.length; i++) {
-     let count = 0; 
-      for (let card of hand.cards) {
-        for (let k = 0; k < CompareHands.suits.length; k++) {
-          if (card.rank === CompareHands.suits[k]) {
-            count++;
-            multipleCards.push(card.suit + card.rank + "")
 
-          }
-        
+    for (let i = 0; i < hand.cards.length; i++) {
+      let count = 0;
+      for (let k = 0; k < 5; k++) {
+        if ((hand.cards[i].rank === hand.cards[k].rank)) {
+          count++;
+          multipleCards.push(hand.cards[k].suit + hand.cards[k].rank + "")
         }
-      } 
-    }  
+      }
+    }
     if (multipleCards.length > 1) {
-      let points;
-      if (caller = "isOnePair") {
-        for (let i = 0; i < multipleCards.length; i++) {
-          points = this.rankToPoint(multipleCards[i])
+      let points = 0;
+      if (caller == "isOnePair") {
+        const cards = multipleCards.slice(0, 2);
+        for (let i = 0; i < cards.length; i++) {
+          const slice = parseInt(cards[i].slice(1));
+          points += this.rankToPoint(slice)
         }
         return points;
-        
-      }if (caller = "isThreeOfAKind") {
-        for (let i = 0; i < multipleCards.length; i++) {
-          points = this.rankToPoint(multipleCards[i])
-          
+
+      } if (caller == "isThreeOfAKind") {
+        const cards = multipleCards.slice(0, 3);
+        for (let i = 0; i < cards.length; i++) {
+          const slice = parseInt(cards[i].slice(1));
+          points += this.rankToPoint(slice)
         }
         return points;
-      }if (caller = "isFourOfAKind") {
-        for (let i = 0; i < multipleCards.length; i++) {
-          points = this.rankToPoint(multipleCards[i])
-          
+      } if (caller == "isFourOfAKind") {
+        const cards = multipleCards.slice(0, 4);
+        for (let i = 0; i < cards.length; i++) {
+          const slice = parseInt(cards[i].slice(1));
+          points += this.rankToPoint(slice)
         }
         return points;
       }
-    
+
+
     }
     if (multipleCards.length < 1) {
       return false
     }
   }
 
-  
+
 
   static isStraightFlush(hand) {
     // if not straight or not flush -> 0
@@ -88,11 +90,11 @@ export default class CompareHands {
     const score = this.counter(hand, "isFourOfAKind")
     if (!score) {
       return 0;
-    } 
+    }
     return score
   }
 
-  static isFullHouse(hand) { 
+  static isFullHouse(hand) {
     return this.isThreeOfAKind(hand) && this.isOnePair(hand);
   }
 
@@ -133,17 +135,17 @@ export default class CompareHands {
     return this.rankToPoint(ranks[4]);
   }
 
-  static isThreeOfAKind(hand ) { // TODO!
+  static isThreeOfAKind(hand) { // TODO!
     const score = this.counter(hand, "isThreeOfAKind")
     if (!score) {
       return 0;
-    } 
+    }
     return score
   }
 
   static isTwoPair(hand) { // TODO!
     const score = this.isOnePair(hand) + this.isOnePair(hand)
-    
+
     return score
   }
 
@@ -159,9 +161,9 @@ export default class CompareHands {
   static isHighestCard(hand) {
     if (!this.counter(hand) && !this.isStraight(hand) && !this.isFlush(hand)) {
       hand.cards = hand.cards.sort((b, a) => {
-        return hand.cards[0] 
+        return hand.cards[0]
       });
-    } 
+    }
   }
 
 
