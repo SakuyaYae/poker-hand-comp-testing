@@ -33,9 +33,8 @@ export default class CompareHands {
 
   }
 
-  static counter(hand, caller) {
-    const multipleCards = [];
-
+  static counter(hand, caller, callNum = 0) {
+    var multipleCards = [];
     for (let i = 0; i < hand.cards.length; i++) {
       for (let k = 0; k < 5; k++) {
         if ((hand.cards[i].rank === hand.cards[k].rank) && (hand.cards[i].suit != hand.cards[k].suit)) {
@@ -52,6 +51,13 @@ export default class CompareHands {
     if (multipleCards.length > 1) {
       let points = 0;
       if (caller == "isOnePair") {
+        if (callNum === 1) {
+          multipleCards = multipleCards.sort((a, b) => this.rankToPoint(a) - this.rankToPoint(b));
+        }
+        if (callNum === 2) {
+          multipleCards = multipleCards.sort((a, b) => this.rankToPoint(a) - this.rankToPoint(b));
+          multipleCards = multipleCards.reverse();
+        }
         const cards = multipleCards.slice(0, 2);
         for (let i = 0; i < cards.length; i++) {
           points += this.rankToPoint(cards[i])
@@ -66,8 +72,6 @@ export default class CompareHands {
         return points;
       } if (caller == "isFourOfAKind") {
         const cards = multipleCards.slice(0, 4);
-        console.log(cards);
-        console.log("___" + multipleCards);
         for (let i = 0; i < cards.length; i++) {
           points += this.rankToPoint(cards[i])
         }
@@ -147,13 +151,13 @@ export default class CompareHands {
   }
 
   static isTwoPair(hand) {
-    const score = this.isOnePair(hand) + this.isOnePair(hand)
+    const score = this.isOnePair(hand, 1) + this.isOnePair(hand, 2)
 
     return score
   }
 
-  static isOnePair(hand) {
-    const score = this.counter(hand, "isOnePair")
+  static isOnePair(hand, callNum = 1) {
+    const score = this.counter(hand, "isOnePair", callNum)
     if (!score) {
       return 0;
     }
@@ -163,11 +167,10 @@ export default class CompareHands {
 
   static isHighestCard(hand) {
     if (!this.counter(hand) && !this.isStraight(hand) && !this.isFlush(hand)) {
-      console.log(hand.cards);
       hand.cards = hand.cards.sort((b, a) => {
-        this.rankToPoint(a.rank) > this.rankToPoint(b.rank)
+        this.rankToPoint(a.rank) > this.rankToPoint(b.rank);
       });
-      return hand.cards.reverse()[0]
+      return hand.cards.reverse()[0];
     }
   }
 
