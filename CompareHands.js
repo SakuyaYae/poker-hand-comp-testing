@@ -37,12 +37,16 @@ export default class CompareHands {
     const multipleCards = [];
 
     for (let i = 0; i < hand.cards.length; i++) {
-      let count = 0;
       for (let k = 0; k < 5; k++) {
         if ((hand.cards[i].rank === hand.cards[k].rank) && (hand.cards[i].suit != hand.cards[k].suit)) {
-          count++;
           multipleCards.push(hand.cards[k].rank + "")
         }
+        if (multipleCards.length >= 4) {
+          break;
+        }
+      }
+      if (multipleCards.length >= 4) {
+        break;
       }
     }
     if (multipleCards.length > 1) {
@@ -56,15 +60,14 @@ export default class CompareHands {
 
       } if (caller == "isThreeOfAKind") {
         const cards = multipleCards.slice(0, 3);
-        console.log(cards);
-        console.log("___" + multipleCards);
-
         for (let i = 0; i < cards.length; i++) {
           points += this.rankToPoint(cards[i])
         }
         return points;
       } if (caller == "isFourOfAKind") {
         const cards = multipleCards.slice(0, 4);
+        console.log(cards);
+        console.log("___" + multipleCards);
         for (let i = 0; i < cards.length; i++) {
           points += this.rankToPoint(cards[i])
         }
@@ -95,7 +98,7 @@ export default class CompareHands {
   }
 
   static isFullHouse(hand) {
-    return this.isThreeOfAKind(hand) && this.isOnePair(hand);
+    return this.isThreeOfAKind(hand) + this.isOnePair(hand);
   }
 
   static isFlush(hand) {
@@ -135,7 +138,7 @@ export default class CompareHands {
     return this.rankToPoint(ranks[4]);
   }
 
-  static isThreeOfAKind(hand) { // TODO!
+  static isThreeOfAKind(hand) {
     const score = this.counter(hand, "isThreeOfAKind")
     if (!score) {
       return 0;
@@ -143,13 +146,13 @@ export default class CompareHands {
     return score
   }
 
-  static isTwoPair(hand) { // TODO!
+  static isTwoPair(hand) {
     const score = this.isOnePair(hand) + this.isOnePair(hand)
 
     return score
   }
 
-  static isOnePair(hand) { // TODO!
+  static isOnePair(hand) {
     const score = this.counter(hand, "isOnePair")
     if (!score) {
       return 0;
@@ -160,9 +163,11 @@ export default class CompareHands {
 
   static isHighestCard(hand) {
     if (!this.counter(hand) && !this.isStraight(hand) && !this.isFlush(hand)) {
+      console.log(hand.cards);
       hand.cards = hand.cards.sort((b, a) => {
-        return hand.cards[0]
+        this.rankToPoint(a.rank) > this.rankToPoint(b.rank)
       });
+      return hand.cards.reverse()[0]
     }
   }
 
