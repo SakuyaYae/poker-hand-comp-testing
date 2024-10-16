@@ -39,9 +39,9 @@ export default class CompareHands {
     for (let i = 0; i < hand.cards.length; i++) {
       let count = 0;
       for (let k = 0; k < 5; k++) {
-        if ((hand.cards[i].rank === hand.cards[k].rank)) {
+        if ((hand.cards[i].rank === hand.cards[k].rank) && (hand.cards[i].suit != hand.cards[k].suit)) {
           count++;
-          multipleCards.push(hand.cards[k].suit + hand.cards[k].rank + "")
+          multipleCards.push(hand.cards[k].rank + "")
         }
       }
     }
@@ -50,23 +50,23 @@ export default class CompareHands {
       if (caller == "isOnePair") {
         const cards = multipleCards.slice(0, 2);
         for (let i = 0; i < cards.length; i++) {
-          const slice = parseInt(cards[i].slice(1));
-          points += this.rankToPoint(slice)
+          points += this.rankToPoint(cards[i])
         }
         return points;
 
       } if (caller == "isThreeOfAKind") {
         const cards = multipleCards.slice(0, 3);
+        console.log(cards);
+        console.log("___" + multipleCards);
+
         for (let i = 0; i < cards.length; i++) {
-          const slice = parseInt(cards[i].slice(1));
-          points += this.rankToPoint(slice)
+          points += this.rankToPoint(cards[i])
         }
         return points;
       } if (caller == "isFourOfAKind") {
         const cards = multipleCards.slice(0, 4);
         for (let i = 0; i < cards.length; i++) {
-          const slice = parseInt(cards[i].slice(1));
-          points += this.rankToPoint(slice)
+          points += this.rankToPoint(cards[i])
         }
         return points;
       }
