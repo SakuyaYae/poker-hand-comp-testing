@@ -40,12 +40,6 @@ export default class CompareHands {
         if ((hand.cards[i].rank === hand.cards[k].rank) && (hand.cards[i].suit != hand.cards[k].suit)) {
           multipleCards.push(hand.cards[k].rank + "")
         }
-        if (multipleCards.length >= 4) {
-          break;
-        }
-      }
-      if (multipleCards.length >= 4) {
-        break;
       }
     }
     if (multipleCards.length > 1) {
@@ -64,21 +58,36 @@ export default class CompareHands {
         }
         return points;
 
-      } if (caller == "isThreeOfAKind") {
+      } if (caller == "isThreeOfAKind" && multipleCards.length >=3) {
+        if (callNum === 2) {
+          multipleCards = multipleCards.sort((a, b) => this.rankToPoint(a) - this.rankToPoint(b));
+          multipleCards = multipleCards.reverse();
+        }
         const cards = multipleCards.slice(0, 3);
         for (let i = 0; i < cards.length; i++) {
           points += this.rankToPoint(cards[i])
         }
         return points;
-      } if (caller == "isFourOfAKind") {
+      } 
+      if (caller == "isFullHouse") {
+        multipleCards = multipleCards.sort((a, b) => this.rankToPoint(a) - this.rankToPoint(b));
+        const pairOne = multipleCards.slice(0, 2); 
+        multipleCards = multipleCards.reverse();
+        const pairTwo = multipleCards.slice(0, 2);
+       console.log(multipleCards);
+       
+        const oddOne = []
+        
+   
+        pairOne.push(cards)
+      }
+      if (caller == "isFourOfAKind") {
         const cards = multipleCards.slice(0, 4);
         for (let i = 0; i < cards.length; i++) {
           points += this.rankToPoint(cards[i])
         }
         return points;
       }
-
-
     }
     if (multipleCards.length < 1) {
       return false
@@ -102,7 +111,11 @@ export default class CompareHands {
   }
 
   static isFullHouse(hand) {
-    return this.isThreeOfAKind(hand) + this.isOnePair(hand);
+    const score = this.counter(hand, "isFullHouse")
+    if (!score) {
+      return 0;
+    }
+    return score;
   }
 
   static isFlush(hand) {
@@ -142,8 +155,8 @@ export default class CompareHands {
     return this.rankToPoint(ranks[4]);
   }
 
-  static isThreeOfAKind(hand) {
-    const score = this.counter(hand, "isThreeOfAKind")
+  static isThreeOfAKind(hand, callNum=0) {
+    const score = this.counter(hand, "isThreeOfAKind", 2)
     if (!score) {
       return 0;
     }
