@@ -113,7 +113,7 @@ export default class CompareHands {
     return this.isStraight(hand) && this.isFlush(hand);
   }
 
-  static isFourOfAKind(hand) { // TODO!
+  static isFourOfAKind(hand) {
     const score = this.counter(hand, "isFourOfAKind")
     if (!score) {
       return 0;
