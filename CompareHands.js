@@ -58,7 +58,7 @@ export default class CompareHands {
         }
         return points;
 
-      } if (caller == "isThreeOfAKind" && multipleCards.length >=3) {
+      } if (caller == "isThreeOfAKind" && multipleCards.length >= 3) {
         if (callNum === 2) {
           multipleCards = multipleCards.sort((a, b) => this.rankToPoint(a) - this.rankToPoint(b));
           multipleCards = multipleCards.reverse();
@@ -68,20 +68,31 @@ export default class CompareHands {
           points += this.rankToPoint(cards[i])
         }
         return points;
-      } 
-      if (caller == "isFullHouse") {
-        multipleCards = multipleCards.sort((a, b) => this.rankToPoint(a) - this.rankToPoint(b));
-        const pairOne = multipleCards.slice(0, 2); 
-        multipleCards = multipleCards.reverse();
-        const pairTwo = multipleCards.slice(0, 2);
-       console.log(multipleCards);
-       
-        const oddOne = []
-        
-   
-        pairOne.push(cards)
       }
-      if (caller == "isFourOfAKind") {
+      if (caller == "isFullHouse" && multipleCards.length >= 5) {
+        multipleCards = multipleCards.sort((a, b) => this.rankToPoint(a) - this.rankToPoint(b));
+        const pairOne = [];
+        pairOne.push(multipleCards.shift());
+        pairOne.push(multipleCards.shift());
+        multipleCards = multipleCards.reverse();
+        const pairTwo = [];
+        pairTwo.push(multipleCards.shift());
+        pairTwo.push(multipleCards.shift());
+        const oddOne = [];
+        oddOne.push(multipleCards.shift());
+        var cards = [];
+        cards.push(pairOne[0]);
+        cards.push(pairOne[1]);
+        cards.push(pairTwo[0]);
+        cards.push(pairTwo[1]);
+        cards.push(oddOne[0]);
+        cards = cards.sort((a, b) => this.rankToPoint(a) - this.rankToPoint(b));
+        for (let i = 0; i < cards.length; i++) {
+          points += this.rankToPoint(cards[i])
+        }
+        return points;
+      }
+      if (caller == "isFourOfAKind" && multipleCards.length >= 4) {
         const cards = multipleCards.slice(0, 4);
         for (let i = 0; i < cards.length; i++) {
           points += this.rankToPoint(cards[i])
@@ -155,7 +166,7 @@ export default class CompareHands {
     return this.rankToPoint(ranks[4]);
   }
 
-  static isThreeOfAKind(hand, callNum=0) {
+  static isThreeOfAKind(hand, callNum = 0) {
     const score = this.counter(hand, "isThreeOfAKind", 2)
     if (!score) {
       return 0;
