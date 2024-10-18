@@ -17,3 +17,4 @@ test('check that isHighestCard returns the highest card for the stronger hand', 
   expect(CompareHands.rankToPoint(CompareHands.isHighestCard(hand1).rank)).toBeGreaterThan(CompareHands.rankToPoint(CompareHands.isHighestCard(hand2).rank));
 
 });
+

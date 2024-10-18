@@ -12,3 +12,12 @@ test('Test that fourOfAKind returns Falsy if hand does not hold holds four of a 
   let hand = new Hand('♠2', '♥2', '♦3', '♣T', '♥4');
   expect(CompareHands.isFourOfAKind(hand)).toBeFalsy();
 });
+
+test('check that isFourOfAKind returns a higher score for a stronger hand (if two hands but with a FourOfAKind)', () => {
+  let hand1 = new Hand('♥9', '♦9', '♣9', '♠9', '♦6');
+  let hand2 = new Hand('♥7', '♦7', '♣7', '♠7', '♦6');
+  let hand1Score = CompareHands.isFourOfAKind(hand1);
+  let hand2Score = CompareHands.isFourOfAKind(hand2);
+  expect(hand1Score).toBeGreaterThan(hand2Score);
+
+});
